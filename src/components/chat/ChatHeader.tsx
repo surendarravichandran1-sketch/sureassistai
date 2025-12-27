@@ -1,8 +1,6 @@
 import { Bot, Sparkles } from "lucide-react";
-
 const ChatHeader = () => {
-  return (
-    <header className="glass-card border-b border-border/30 px-6 py-4 sticky top-0 z-10">
+  return <header className="glass-card border-b border-border/30 px-6 py-4 sticky top-0 z-10">
       <div className="max-w-4xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="relative">
@@ -24,12 +22,10 @@ const ChatHeader = () => {
         
         <div className="flex items-center gap-2">
           <div className="px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
-            <span className="text-xs text-primary font-medium">AI Powered</span>
+            <span className="text-xs text-primary font-medium">Developed by Surendar</span>
           </div>
         </div>
       </div>
-    </header>
-  );
+    </header>;
 };
-
 export default ChatHeader;
