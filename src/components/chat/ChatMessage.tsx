@@ -27,31 +27,32 @@ const ChatMessage = ({ role, content, isNew = false }: ChatMessageProps) => {
   return (
     <div
       className={cn(
-        "flex gap-4 px-4 py-3",
+        "flex gap-2 sm:gap-4 px-2 sm:px-4 py-3",
         isNew && "animate-slide-up",
         isUser ? "justify-end" : "justify-start"
       )}
     >
       {!isUser && (
-        <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
-          <Bot className="w-4 h-4 text-primary-foreground" />
+        <div className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
+          <Bot className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-foreground" />
         </div>
       )}
 
       <div
         className={cn(
-          "max-w-[80%] rounded-2xl px-4 py-3 chat-font",
+          "max-w-[85%] sm:max-w-[80%] rounded-2xl px-3 sm:px-4 py-3 chat-font overflow-hidden break-words",
           isUser
             ? "bg-primary text-primary-foreground rounded-br-md"
             : "bg-card border border-border/50 rounded-bl-md"
         )}
+        style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}
       >
         {formatContent(content)}
       </div>
 
       {isUser && (
-        <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-secondary flex items-center justify-center">
-          <User className="w-4 h-4 text-secondary-foreground" />
+        <div className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-secondary flex items-center justify-center">
+          <User className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-secondary-foreground" />
         </div>
       )}
     </div>
