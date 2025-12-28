@@ -1,6 +1,10 @@
 import { Bot, Sparkles, Database, Settings, Zap } from "lucide-react";
 
-const WelcomeMessage = () => {
+interface WelcomeMessageProps {
+  userName?: string;
+}
+
+const WelcomeMessage = ({ userName }: WelcomeMessageProps) => {
   const features = [
     { icon: Database, label: "SAP Cash Application" },
     { icon: Settings, label: "Oracle Fusion & Equant" },
@@ -17,11 +21,13 @@ const WelcomeMessage = () => {
       </div>
 
       <h2 className="text-2xl font-bold text-center mb-2">
-        <span className="gradient-text">Welcome to SureAssist</span>
+        <span className="gradient-text">
+          {userName ? `Welcome, ${userName}!` : "Welcome to SureAssist"}
+        </span>
       </h2>
 
       <p className="text-muted-foreground text-center max-w-lg mb-6 chat-font">
-        👋 Hi! I'm SureAssist AI, built by Surendar Ravichandran like ChatGPT and specialized in SAP and Oracle Cash Application. Ask me anything about cash application processes, issues, or best practices!
+        👋 Hi{userName ? ` ${userName}` : ""}! I'm SureAssist AI, built by Surendar Ravichandran like ChatGPT and specialized in SAP and Oracle Cash Application. Ask me anything about cash application processes, issues, or best practices!
       </p>
 
       <div className="flex flex-wrap justify-center gap-3 mb-8">

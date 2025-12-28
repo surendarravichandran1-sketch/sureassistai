@@ -1,6 +1,26 @@
-import { Bot, Sparkles } from "lucide-react";
+import { Bot, Sparkles, LogOut, Shield } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 const ChatHeader = () => {
-  return <header className="glass-card border-b border-border/30 px-6 py-4 sticky top-0 z-10">
+  const navigate = useNavigate();
+  const { profile, isAdmin, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/auth");
+  };
+
+  return (
+    <header className="glass-card border-b border-border/30 px-4 sm:px-6 py-4 sticky top-0 z-10">
       <div className="max-w-4xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="relative">
@@ -21,11 +41,48 @@ const ChatHeader = () => {
         </div>
         
         <div className="flex items-center gap-2">
-          <div className="px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
+          <div className="hidden sm:block px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
             <span className="text-xs text-primary font-medium">Developed by Surendar</span>
           </div>
+
+          {profile && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <div className="w-7 h-7 rounded-full bg-secondary flex items-center justify-center text-xs font-medium">
+                    {profile.display_name.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="hidden sm:inline text-sm">{profile.display_name}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <div className="px-2 py-1.5">
+                  <p className="text-sm font-medium">{profile.display_name}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {isAdmin ? "Administrator" : "User"}
+                  </p>
+                </div>
+                <DropdownMenuSeparator />
+                {isAdmin && (
+                  <>
+                    <DropdownMenuItem onClick={() => navigate("/admin")}>
+                      <Shield className="w-4 h-4 mr-2" />
+                      Admin Dashboard
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                  </>
+                )}
+                <DropdownMenuItem onClick={handleSignOut}>
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </div>
-    </header>;
+    </header>
+  );
 };
+
 export default ChatHeader;
