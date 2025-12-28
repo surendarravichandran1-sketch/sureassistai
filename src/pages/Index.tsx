@@ -1,4 +1,6 @@
 import { useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import ChatHeader from "@/components/chat/ChatHeader";
 import ChatMessage from "@/components/chat/ChatMessage";
 import ChatInput from "@/components/chat/ChatInput";
@@ -6,10 +8,13 @@ import ChatFooter from "@/components/chat/ChatFooter";
 import TypingIndicator from "@/components/chat/TypingIndicator";
 import WelcomeMessage from "@/components/chat/WelcomeMessage";
 import OracleSelector from "@/components/chat/OracleSelector";
-import { useChat } from "@/hooks/useChat";
+import { useChatWithPersistence } from "@/hooks/useChatWithPersistence";
+import { Loader2 } from "lucide-react";
 
 const Index = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  const { user, profile, isLoading: authLoading } = useAuth();
 
   const {
     messages,
@@ -17,12 +22,31 @@ const Index = () => {
     sendMessage,
     showOracleSelector,
     handleOracleSelect,
-  } = useChat();
+  } = useChatWithPersistence();
+
+  // Redirect to auth if not logged in
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate("/auth");
+    }
+  }, [user, authLoading, navigate]);
 
   // Auto-scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
+
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-background">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -37,7 +61,7 @@ const Index = () => {
       <main className="flex-1 overflow-y-auto scrollbar-thin relative">
         <div className="max-w-4xl mx-auto py-4">
           {messages.length === 0 ? (
-            <WelcomeMessage />
+            <WelcomeMessage userName={profile?.display_name} />
           ) : (
             <>
               {messages.map((message) => (
